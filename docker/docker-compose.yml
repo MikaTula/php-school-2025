@@ -27,6 +27,8 @@ services:
     restart: unless-stopped
     container_name: cm-api-server
     working_dir: /var/www/api-server
+    environment:
+      PHP_IDE_CONFIG: serverName=DockerMusicServer
     depends_on:
       - cm-clear-log
     ports:
