@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "1757a2a6-1eac-475c-8f55-15d8186e0345",
+		"name": "hello docker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2646637"
+	},
+	"item": [
+		{
+			"name": "Album",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://hello-docker.loc/api/albums/all",
+							"protocol": "http",
+							"host": [
+								"hello-docker",
+								"loc"
+							],
+							"path": [
+								"api",
+								"albums",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://hello-docker.loc/api/albums?id=1",
+							"protocol": "http",
+							"host": [
+								"hello-docker",
+								"loc"
+							],
+							"path": [
+								"api",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://hello-docker.loc/api/albums?id=1",
+							"protocol": "http",
+							"host": [
+								"hello-docker",
+								"loc"
+							],
+							"path": [
+								"api",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "artistId",
+									"value": "12",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "1996",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Test Album",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://hello-docker.loc/api/albums",
+							"protocol": "http",
+							"host": [
+								"hello-docker",
+								"loc"
+							],
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "artistId",
+									"value": "12",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "1996",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Test Album",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "12",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://hello-docker.loc/api/albums",
+							"protocol": "http",
+							"host": [
+								"hello-docker",
+								"loc"
+							],
+							"path": [
+								"api",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

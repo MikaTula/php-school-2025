@@ -24,7 +24,7 @@
         {
             // Создаем объект Request
             $request = new stdClass();
-            if (self::getRequestMethod()==='PUT' || self::getRequestMethod()==='DELETE') {
+            if (self::getRequestMethod()==='PUT') {
                 parse_str(file_get_contents("php://input"), $_PUT);
                 $request->params = $_PUT;
             } else {
