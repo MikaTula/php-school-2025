@@ -4,10 +4,8 @@
 
     namespace App\Domain;
 
-    class Playlist
+    class Singer
     {
         public int $id;
-
-        public string $title;
-
+        public string $name;
     }

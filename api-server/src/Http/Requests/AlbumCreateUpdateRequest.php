@@ -4,11 +4,12 @@
 
     namespace App\Http\Requests;
 
-    use App\Api\Models\AlbumModel;
+    use App\Api\Models\AlbumCreateUpdateModel;
+    use App\Api\Models\SingerCreateUpdateModel;
     use App\Http\Request;
     use JsonMapper;
 
-    class AlbumRequest extends Request
+    class AlbumCreateUpdateRequest extends Request
     {
         public function rules(): array
         {
@@ -17,12 +18,14 @@
                 case 'DELETE':
                 case 'PUT':
                     return [
-                        'id' => ['required', 'int']
+                        'id' => ['required', 'int'],
+                        'year' => ['required', 'int'],
+                        'title' => ['required', 'max:20']
                     ];
 
                 case 'POST':
                     return [
-                        'singerId' => ['required', 'int'],
+                        'singerId' => ['required'],
                         'year' => ['required', 'int'],
                         'title' => ['required', 'max:20']
                     ];
@@ -31,8 +34,8 @@
             return [];
         }
 
-        public function getModel(): AlbumModel
+        public function getModel(): AlbumCreateUpdateModel
         {
-            return (new JsonMapper())->map((object)$this->data->params, new AlbumModel());
+            return (new JsonMapper())->map((object)$this->data->params, new AlbumCreateUpdateModel());
         }
     }

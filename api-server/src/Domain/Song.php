@@ -10,15 +10,6 @@
 
         public string $title;
 
-        /**
-         * @var Artist[]
-         */
-        public array $artistsList;
-
         public int $numberLikes;
-
-        /**
-         * @var Genre[]
-         */
-        public array $genresList;
     }
+

@@ -1,20 +1,13 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Domain;
+namespace App\Domain;
 
-    class Album extends Playlist
-    {
-        public int $id;
-
-        public int $year;
-
-        /**
-         * @var Artist
-         */
-        public Artist $artist;
-
-        public int $artistId;
-
-    }
+class Album
+{
+    public int $id;
+    public string $title;
+    public int $year;
+    public int $singerId;
+}

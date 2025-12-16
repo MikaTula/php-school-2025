@@ -4,35 +4,37 @@
 
     namespace App\Http\Requests;
 
-    use App\Api\Models\AlbumModel;
+    use App\Api\Models\SingerModel;
     use App\Http\Request;
     use JsonMapper;
 
-    class AlbumRequest extends Request
+    class SingerRequest extends Request
     {
         public function rules(): array
         {
             switch ($this->method) {
                 case 'GET':
+                    return [
+                        'id' => ['required', 'int'],
+                    ];
                 case 'DELETE':
                 case 'PUT':
                     return [
-                        'id' => ['required', 'int']
+                        'id' => ['required', 'int'],
+                        'name' => ['required', 'max:20']
                     ];
 
                 case 'POST':
                     return [
-                        'singerId' => ['required', 'int'],
-                        'year' => ['required', 'int'],
-                        'title' => ['required', 'max:20']
+                        'name' => ['required', 'max:20']
                     ];
             }
 
             return [];
         }
 
-        public function getModel(): AlbumModel
+        public function getModel(): SingerModel
         {
-            return (new JsonMapper())->map((object)$this->data->params, new AlbumModel());
+            return (new JsonMapper())->map((object)$this->data->params, new SingerModel());
         }
     }

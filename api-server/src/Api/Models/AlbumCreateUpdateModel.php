@@ -4,10 +4,10 @@
 
     namespace App\Api\Models;
 
-    class AlbumModel
+    class AlbumCreateUpdateModel
     {
         public int $id;
         public string $title;
+        public int $singerId;
         public ?int $year = null;
-        public SingerModel $singer;
     }

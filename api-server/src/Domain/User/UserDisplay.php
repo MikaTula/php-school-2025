@@ -4,10 +4,9 @@
 
     namespace App\Domain\User;
 
-    use App\Domain\Artist;
     use App\Domain\Genre;
     use App\Domain\Playlist;
-
+    use Codemastersintl\MusicService\Models\Artist\Artist;
 
     class UserDisplay
     {

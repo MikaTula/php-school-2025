@@ -11,4 +11,6 @@
         case NotFound = 404;
 
         case InvalidRequest = 100;
+
+        case Error = 500;
     }

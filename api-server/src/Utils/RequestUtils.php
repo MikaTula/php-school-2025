@@ -24,15 +24,11 @@
         {
             // Создаем объект Request
             $request = new stdClass();
-            if (self::getRequestMethod()==='PUT') {
-                parse_str(file_get_contents("php://input"), $_PUT);
+            if (self::getRequestMethod() === 'PUT') {
+                 parse_str(file_get_contents("php://input"), $_PUT);
                 $request->params = $_PUT;
             } else {
-                $request->params = self::getRequestMethod()==='POST' ? $_POST:$_GET;
-            }
-
-            if (isset($_FILES) && count($_FILES) > 0) {
-                $request->params = [...$request->params, ...$_FILES];
+                $request->params = self::getRequestMethod() === 'POST' ? $_POST : $_GET;
             }
 
             return $request;
@@ -43,7 +39,7 @@
             $reflectionMethod = new ReflectionMethod($handler[0], $handler[1]);
             $parameters = $reflectionMethod->getParameters();
 
-            if (count($parameters)===0) {
+            if (count($parameters) === 0) {
                 return EmptyRequest::class;
             }
 
