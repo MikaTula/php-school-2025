@@ -2,3 +2,4 @@
 /vendor
 /logs
 
+/api-server/resources/input/albums.txt.*
