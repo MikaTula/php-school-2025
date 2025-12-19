@@ -3,3 +3,4 @@
 /logs
 
 /api-server/resources/input/albums.txt.*
+/api-server/.env

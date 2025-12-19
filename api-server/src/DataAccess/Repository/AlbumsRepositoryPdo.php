@@ -69,7 +69,8 @@
                 return $mapper->map($row, new AlbumModel());
             }
 
-            throw new Exception("Album not found");
+            throw new \Error("Album not found");
+            // throw new Exception("Album not found");
         }
 
         public function removeById(int $id): void

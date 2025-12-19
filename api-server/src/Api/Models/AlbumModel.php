@@ -10,4 +10,5 @@
         public string $title;
         public ?int $year = null;
         public SingerModel $singer;
+        public GenreModel $genre;
     }

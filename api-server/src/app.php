@@ -6,6 +6,7 @@
     use App\Api\Controllers\SingerController;
     use App\DataAccess\PdoFactory;
     use App\DataAccess\Repository\AlbumsRepositoryPdo;
+    use App\DataAccess\Repository\AlbumsRepositoryTxt;
     use App\DataAccess\Repository\SingerRepositoryPdo;
     use App\Http\Middleware\MiddlewarePipeline;
     use App\Http\Middleware\ValidatorMiddleware;
@@ -30,8 +31,8 @@
     $albumsRepository = new AlbumsRepositoryPdo($pdo);
     $albumController = new AlbumController($albumsRepository);
 
-    $artistRepository = new SingerRepositoryPdo($pdo);
-    $singerController = new SingerController($artistRepository);
+    $singerRepository = new SingerRepositoryPdo($pdo);
+    $singerController = new SingerController($singerRepository);
 
     $routes = [
             // Albums

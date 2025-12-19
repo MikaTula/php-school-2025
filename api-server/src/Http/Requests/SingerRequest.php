@@ -14,16 +14,15 @@
         {
             switch ($this->method) {
                 case 'GET':
+                case 'DELETE':
                     return [
                         'id' => ['required', 'int'],
                     ];
-                case 'DELETE':
                 case 'PUT':
                     return [
                         'id' => ['required', 'int'],
                         'name' => ['required', 'max:20']
                     ];
-
                 case 'POST':
                     return [
                         'name' => ['required', 'max:20']
