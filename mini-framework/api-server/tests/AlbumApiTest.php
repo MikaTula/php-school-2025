@@ -5,72 +5,68 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Api\Controllers\AlbumController;
-use App\DataAccess\AlbumsRepository;
+use App\DataAccess\Interfaces\AlbumsRepositoryInterface;
 use App\Http\Requests\AlbumRequest;
-use PHPUnit\Framework\TestCase;
+use Error;
+use PHPUnit\Framework\MockObject\Exception;
+use stdClass;
 
-require_once(__DIR__ . '/../vendor/autoload.php');
-
-
-class AlbumApiTest extends TestCase
+class AlbumApiTest extends BaseTestCase
 {
-    private array $albums = [
-        ["id" => 1, "name" => "Test Name 1", "artistId" => 1, "year" => 2002],
-        ["id" => 2, "name" => "Test Name 2", "artistId" => 1, "year" => 2024],
-        ["id" => 3, "name" => "Test Name 3", "artistId" => 2, "year" => 2024]
-    ];
-
-
+    /**
+     * @throws Exception
+     */
     public function testGetAll()
     {
-        // $albumsRepository = new AlbumsRepository(dirname(__DIR__) . '/resources/input/albums.txt');
-
-        $mock = $this->createMock(AlbumsRepository::class);
+        $mock = $this->createMock(AlbumsRepositoryInterface::class);
         $mock->method('getAll')->willReturn($this->albums);
 
         $albumController = new AlbumController($mock);
+        $response = $albumController->getAll();
 
-        $response = $albumController->getAlbums();
-        $this->assertEquals(count($this->albums), count($response->data));
+        $this->assertSameSize($this->albums, $response->data);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetById()
     {
-        // $albumsRepository = new AlbumsRepository(dirname(__DIR__) . '/resources/input/albums.txt');
-
-        $mock = $this->createMock(AlbumsRepository::class);
-        $mock->method('getById')->with(2)->willReturn($this->albums[1]);
-
-        $albumController = new AlbumController($mock);
+        $mock = $this->createMock(AlbumsRepositoryInterface::class);
+        $mock->method('getById')->with(12)->willReturn($this->albums[1]);
 
         $params = new stdClass();
-        $params->params = ['id' => 2];
+        $params->params = ['id' => 12];
 
         $request = new AlbumRequest('GET', '/api/albums', $params);
 
-        $response = $albumController->getAlbum($request);
+        $albumController = new AlbumController($mock);
+        $response = $albumController->getById($request);
 
-        $this->assertEquals(2, $response->data['id']);
-        $this->assertIsArray($response->data);
+        $this->assertEquals(12, $response->data->id);
+        $this->assertIsObject($response->data);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetByIdNegative()
     {
-        $mock = new AlbumsRepository(dirname(__DIR__) . '/resources/input/albums.txt');
+        $mock = $this->createMock(AlbumsRepositoryInterface::class);
 
-        // $mock = $this->createMock(AlbumsRepository::class);
-        // $mock->method('getById')->with(10)->willReturn($this->albums[1]);
+        $mock->method('getById')->with(12)->willThrowException(new Error("Album not found"));
+
 
         $albumController = new AlbumController($mock);
 
         $params = new stdClass();
-        $params->params = ['id' => 10];
+        $params->params = ['id' => 12];
 
         $request = new AlbumRequest('GET', '/api/albums', $params);
 
-        $response = $albumController->getAlbum($request);
+        $this->expectException(Error::class);
 
-        $this->assertNull($response->data);
-        $this->assertEquals(404, $response->code);
+        $this->expectExceptionMessage("Album not found");
+        $albumController->getById($request);
     }
 }
