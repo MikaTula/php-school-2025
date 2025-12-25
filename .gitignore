@@ -1,0 +1,10 @@
+/mini-framework/.idea
+/mini-framework/vendor
+/mini-framework/logs
+
+/mini-framework/.idea
+/mini-framework/vendor
+/mini-framework/logs
+
+/mini-framework/api-server/resources/input/albums.txt.*
+/mini-framework/api-server/.env

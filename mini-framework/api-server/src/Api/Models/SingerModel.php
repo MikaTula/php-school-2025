@@ -1,10 +1,10 @@
 <?php
 
-    namespace App\Api\Models;
+namespace App\Api\Models;
 
-    class SingerModel
-    {
-        public int $id;
+class SingerModel
+{
+    public int $id;
 
-        public string $name;
-    }
+    public string $name;
+}

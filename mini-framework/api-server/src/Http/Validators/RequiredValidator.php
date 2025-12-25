@@ -1,15 +1,15 @@
 <?php
 
-    namespace App\Http\Validators;
+namespace App\Http\Validators;
 
-    class RequiredValidator implements IValidator
+class RequiredValidator implements IValidator
+{
+    public function isValid(string $fieldName, array $params): bool
     {
-        public function isValid(string $fieldName, array $params): bool
-        {
-            if (!array_key_exists($fieldName, $params)) {
-                return false;
-            }
-
-            return $params[$fieldName]!==null;
+        if (!array_key_exists($fieldName, $params)) {
+            return false;
         }
+
+        return $params[$fieldName] !== null;
     }
+}

@@ -1,38 +1,38 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Http\Requests;
+namespace App\Http\Requests;
 
-    use App\Api\Models\AlbumModel;
-    use App\Http\Request;
-    use JsonMapper;
+use App\Api\Models\AlbumModel;
+use App\Http\Request;
+use JsonMapper;
 
-    class AlbumRequest extends Request
+class AlbumRequest extends Request
+{
+    public function rules(): array
     {
-        public function rules(): array
-        {
-            switch ($this->method) {
-                case 'GET':
-                case 'DELETE':
-                case 'PUT':
-                    return [
-                        'id' => ['required', 'int']
-                    ];
+        switch ($this->method) {
+            case 'GET':
+            case 'DELETE':
+            case 'PUT':
+                return [
+                    'id' => ['required', 'int']
+                ];
 
-                case 'POST':
-                    return [
-                        'singerId' => ['required', 'int'],
-                        'year' => ['required', 'int'],
-                        'title' => ['required', 'max:20']
-                    ];
-            }
-
-            return [];
+            case 'POST':
+                return [
+                    'singerId' => ['required', 'int'],
+                    'year' => ['required', 'int'],
+                    'title' => ['required', 'max:20']
+                ];
         }
 
-        public function getModel(): AlbumModel
-        {
-            return (new JsonMapper())->map((object)$this->data->params, new AlbumModel());
-        }
+        return [];
     }
+
+    public function getModel(): AlbumModel
+    {
+        return (new JsonMapper())->map((object)$this->data->params, new AlbumModel());
+    }
+}

@@ -1,15 +1,14 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Domain;
+namespace App\Domain;
 
-    class Song
-    {
-        public int $id;
+class Song
+{
+    public int $id;
 
-        public string $title;
+    public string $title;
 
-        public int $numberLikes;
-    }
-
+    public int $numberLikes;
+}

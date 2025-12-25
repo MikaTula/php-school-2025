@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="PSR12 Coding Standard">
+    <rule ref="PSR12"/>
+
+    <!-- Настройте отступы для фигурных скобок -->
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4"/>
+            <property name="exact" value="true"/>
+        </properties>
+    </rule>
+
+    <!-- Игнорировать конкретные ошибки, если нужно -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
+    <file>src/</file>
+    <file>databases/</file>
+    <file>tests/</file>
+</ruleset>

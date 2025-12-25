@@ -21,3 +21,21 @@
   
 # mailhog
   MailHog works on http://hello-docker.loc:8025/  
+
+
+# Set git hooks
+
+	Run in root folder of project
+	git config core.hooksPath .githooks
+
+# Reformat all files
+vendor\bin\phpcbf --standard=phpcs.xml --colors --warning-severity=0 app
+
+# Reformat one file
+./vendor/bin/phpcbf --standard=phpcs.xml --colors --warning-severity=0 tests/FileEditorTest.php
+
+
+# Check all files
+./vendor/bin/phpcs --standard=phpcs.xml --colors --warning-severity=0 ./src/*
+./vendor/bin/phpcs --standard=phpcs.xml --colors --warning-severity=0 ./tests/*
+

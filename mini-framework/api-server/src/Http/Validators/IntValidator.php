@@ -1,20 +1,20 @@
 <?php
 
-    namespace App\Http\Validators;
+namespace App\Http\Validators;
 
-    class IntValidator implements IValidator
+class IntValidator implements IValidator
+{
+    public function isValid(string $fieldName, array $params): bool
     {
-        public function isValid(string $fieldName, array $params): bool
-        {
-            $fieldValue = $params[$fieldName];
+        $fieldValue = $params[$fieldName];
 
-            if (!is_numeric($fieldValue)) {
-                return false;
-            }
-
-            $int = (int) $fieldValue;
-            $float = (float) $fieldValue;
-
-            return $int==$float;
+        if (!is_numeric($fieldValue)) {
+            return false;
         }
+
+        $int = (int)$fieldValue;
+        $float = (float)$fieldValue;
+
+        return $int == $float;
     }
+}

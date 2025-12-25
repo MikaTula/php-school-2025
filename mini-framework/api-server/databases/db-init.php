@@ -1,15 +1,16 @@
 <?php
-    // run in docker
-    // docker exec -it cm-api-server sh -c 'php /var/www/api-server/databases/db-init.php'
 
-    use App\DataAccess\PdoFactory;
+// run in docker
+// docker exec -it cm-api-server sh -c 'php /var/www/api-server/databases/db-init.php'
 
-    require __DIR__.'/../vendor/autoload.php';
+use App\DataAccess\PdoFactory;
 
-    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-    $dotenv->load();
+require __DIR__ . '/../vendor/autoload.php';
 
-    $pdo = PdoFactory::instance();
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
+$pdo = PdoFactory::instance();
 
 //    $pdo->exec('DROP TABLE IF EXISTS `albums`');
 //    $pdo->exec('CREATE TABLE `albums`
@@ -31,21 +32,24 @@
 //            )
 //    ');
 
-    $pdo->exec('DROP TABLE IF EXISTS `auth_tokens`');
-    $pdo->exec('CREATE TABLE `auth_tokens`
+$pdo->exec('DROP TABLE IF EXISTS `auth_tokens`');
+$pdo->exec(
+    'CREATE TABLE `auth_tokens`
             (
                 id INT NOT NULL AUTO_INCREMENT,
                 user_id INT NOT NULL,
-                token_hash VARCHAR(255) NOT NULL, 
+                token_hash VARCHAR(255) NOT NULL,
                 token TEXT NOT NULL,
                 expired_at DATETIME NOT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)
             )
-    ');
+    '
+);
 
-    $pdo->exec('DROP TABLE IF EXISTS `users`');
-    $pdo->exec('CREATE TABLE `users`
+$pdo->exec('DROP TABLE IF EXISTS `users`');
+$pdo->exec(
+    'CREATE TABLE `users`
             (
                 id INT NOT NULL AUTO_INCREMENT,
                 login VARCHAR(64) NOT NULL,
@@ -56,16 +60,18 @@
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)
             )
-    ');
+    '
+);
 
-    // pass admin123
-    $pdo->exec('INSERT INTO `users`
+// pass admin123
+$pdo->exec(
+    'INSERT INTO `users`
             (
                 login,
                 password_hash,
                 first_name,
                 last_name,
-                birthday               
+                birthday
             ) VALUES (
                 "admin",
                 "$2y$10$NLf4uc3kJ0vvtVdEzXxBMuAfZT2/f5naV2mbiUXj4rWZ8gAFO7xpi",
@@ -73,6 +79,6 @@
                 "Воробей",
                 "2001-10-07 15:15:15"
             )
-    ');
-    echo 'data base recreated';
-
+    '
+);
+echo 'data base recreated';

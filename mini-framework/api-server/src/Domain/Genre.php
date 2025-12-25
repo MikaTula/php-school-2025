@@ -1,12 +1,12 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Domain;
+namespace App\Domain;
 
-    class Genre
-    {
-        public int $id;
+class Genre
+{
+    public int $id;
 
-        public string $title;
-    }
+    public string $title;
+}

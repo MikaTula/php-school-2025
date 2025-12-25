@@ -34,7 +34,7 @@ class AlbumsRepositoryTxt implements AlbumsRepositoryInterface
     public function getById(int $id): AlbumModel
     {
         foreach ($this->albums as $album) {
-            if ($album['id']===$id) {
+            if ($album['id'] === $id) {
                 $mapper = new JsonMapper();
                 return $mapper->map((object)$album, new AlbumModel());
             }
@@ -45,7 +45,7 @@ class AlbumsRepositoryTxt implements AlbumsRepositoryInterface
     public function removeById(int $id): void
     {
         foreach ($this->albums as $key => $album) {
-            if ($album['id']===$id) {
+            if ($album['id'] === $id) {
                 unset($this->albums[$key]);
             }
         }
@@ -53,12 +53,17 @@ class AlbumsRepositoryTxt implements AlbumsRepositoryInterface
         $this->updateData($this->albums);
     }
 
+    private function updateData(mixed $data): void
+    {
+        DataUtils::writeDataSource($this->filePath, $data);
+    }
+
     public function update(AlbumCreateUpdateModel $model): void
     {
         foreach ($this->albums as $key => $album) {
-            if ($album['id']===$model->id) {
+            if ($album['id'] === $model->id) {
                 foreach ($model as $param => $value) {
-                    if ($value!==null) {
+                    if ($value !== null) {
                         $this->albums[$key][$param] = $value;
                     }
                 }
@@ -72,24 +77,19 @@ class AlbumsRepositoryTxt implements AlbumsRepositoryInterface
     public function create(AlbumCreateUpdateModel $model): void
     {
         if (count($this->albums) > 0) {
-            $id = (int) end($this->albums)['id'] + 1;
+            $id = (int)end($this->albums)['id'] + 1;
         } else {
             $id = 0;
         }
 
 
         $this->albums[] = [
-                'id'       => $id,
-                'name'     => $model->name,
-                'singerId' => $model->singerId,
-                'year'     => $model->year
+            'id' => $id,
+            'name' => $model->name,
+            'singerId' => $model->singerId,
+            'year' => $model->year
         ];
 
         $this->updateData($this->albums);
-    }
-
-    private function updateData(mixed $data): void
-    {
-        DataUtils::writeDataSource($this->filePath, $data);
     }
 }

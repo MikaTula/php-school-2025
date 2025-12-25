@@ -1,11 +1,11 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Api\Models;
+namespace App\Api\Models;
 
-    class SingerCreateUpdateModel
-    {
-        public int $id;
-        public string $name;
-    }
+class SingerCreateUpdateModel
+{
+    public int $id;
+    public string $name;
+}

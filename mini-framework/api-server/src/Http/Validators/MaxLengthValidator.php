@@ -1,20 +1,20 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Http\Validators;
+namespace App\Http\Validators;
 
-    class MaxLengthValidator implements IValidator
+class MaxLengthValidator implements IValidator
+{
+    private int $maxLength;
+
+    public function __construct(int $length)
     {
-        private int $maxLength;
-
-        public function __construct(int $length)
-        {
-            $this->maxLength = $length;
-        }
-
-        public function isValid(string $fieldName, array $params): bool
-        {
-            return strlen($params[$fieldName]) <= $this->maxLength;
-        }
+        $this->maxLength = $length;
     }
+
+    public function isValid(string $fieldName, array $params): bool
+    {
+        return strlen($params[$fieldName]) <= $this->maxLength;
+    }
+}

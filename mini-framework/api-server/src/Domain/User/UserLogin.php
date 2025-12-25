@@ -1,13 +1,13 @@
 <?php
 
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    namespace App\Domain\User;
+namespace App\Domain\User;
 
-    class UserLogin
-    {
-        public int $id;
+class UserLogin
+{
+    public int $id;
 
-        public string $login;
-        public string $password;
-    }
+    public string $login;
+    public string $password;
+}
