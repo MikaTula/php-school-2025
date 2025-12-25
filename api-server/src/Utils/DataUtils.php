@@ -22,6 +22,6 @@
 
         private static function makeBackUp(string $fileName): void
         {
-            file_put_contents($fileName.'.'.date("Ymd-His"), file_get_contents($fileName));
+            file_put_contents($fileName . '.' . date("Ymd-His"), file_get_contents($fileName));
         }
     }

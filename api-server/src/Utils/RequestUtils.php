@@ -5,6 +5,7 @@
     namespace App\Utils;
 
     use App\Http\Requests\EmptyRequest;
+    use ReflectionException;
     use ReflectionMethod;
     use stdClass;
 
@@ -31,9 +32,21 @@
                 $request->params = self::getRequestMethod() === 'POST' ? $_POST : $_GET;
             }
 
+            $headers = getallheaders();
+            if (!empty($_COOKIE['auth_token'])) {
+                $request->auth_token = $_COOKIE['auth_token'];
+            }
+
+            if (!empty($headers['Authorization'])) {
+                $request->auth_token = str_replace('Bearer ', '', $headers['Authorization']);
+            }
+
             return $request;
         }
 
+        /**
+         * @throws ReflectionException
+         */
         public static function getRequestType(callable $handler): string
         {
             $reflectionMethod = new ReflectionMethod($handler[0], $handler[1]);

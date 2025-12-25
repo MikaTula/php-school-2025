@@ -8,9 +8,11 @@
     {
         case Ok = 0;
 
-        case NotFound = 404;
-
         case InvalidRequest = 100;
+		
+		case InvalidToken = 401;
+		
+		case NotFound = 404;
 
         case Error = 500;
     }

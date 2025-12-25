@@ -9,6 +9,7 @@
         public function __construct(
                 public int $code,
                 public mixed $data,
-                public ?string $message = null
+                public ?string $message = null,
+                public array $headers = [],
         ) {}
     }

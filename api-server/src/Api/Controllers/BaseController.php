@@ -9,9 +9,9 @@
 
     abstract class BaseController
     {
-        public function successResponse(mixed $data = null): Response
+        public function successResponse(mixed $data = null, array $headers = []): Response
         {
-            return new Response(ResponseCode::Ok->value, $data);
+            return new Response(ResponseCode::Ok->value, $data, headers: $headers);
         }
 
         public function failResponse(ResponseCode $code, string $message, mixed $data): Response
