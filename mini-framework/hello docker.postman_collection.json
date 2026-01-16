@@ -7,6 +7,178 @@
 	},
 	"item": [
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "admin",
+									"description": "pass - admin123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable(\"token\", '');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.data.token);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "admin",
+									"description": "pass - admin123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/get-token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
 			"name": "Album",
 			"item": [
 				{
@@ -15,14 +187,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://hello-docker.loc/api/albums/all",
-							"protocol": "http",
+							"raw": "{{url}}/albums/all",
 							"host": [
-								"hello-docker",
-								"loc"
+								"{{url}}"
 							],
 							"path": [
-								"api",
 								"albums",
 								"all"
 							]
@@ -31,7 +200,7 @@
 					"response": []
 				},
 				{
-					"name": "Get One",
+					"name": "GetById",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -43,14 +212,11 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://hello-docker.loc/api/albums?id=1",
-							"protocol": "http",
+							"raw": "{{url}}/albums?id=1",
 							"host": [
-								"hello-docker",
-								"loc"
+								"{{url}}"
 							],
 							"path": [
-								"api",
 								"albums"
 							],
 							"query": [
@@ -73,20 +239,17 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://hello-docker.loc/api/albums?id=1",
-							"protocol": "http",
+							"raw": "{{url}}/albums?id=5",
 							"host": [
-								"hello-docker",
-								"loc"
+								"{{url}}"
 							],
 							"path": [
-								"api",
 								"albums"
 							],
 							"query": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "5"
 								}
 							]
 						}
@@ -102,31 +265,28 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "artistId",
-									"value": "12",
+									"key": "singerId",
+									"value": "2",
 									"type": "text"
 								},
 								{
 									"key": "year",
-									"value": "1996",
+									"value": "122",
 									"type": "text"
 								},
 								{
-									"key": "name",
-									"value": "Test Album",
+									"key": "title",
+									"value": "My Second Album ",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://hello-docker.loc/api/albums",
-							"protocol": "http",
+							"raw": "{{url}}/albums",
 							"host": [
-								"hello-docker",
-								"loc"
+								"{{url}}"
 							],
 							"path": [
-								"api",
 								"albums"
 							]
 						}
@@ -142,36 +302,33 @@
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
-									"key": "artistId",
-									"value": "12",
+									"key": "singerId",
+									"value": "2",
 									"type": "text"
 								},
 								{
 									"key": "year",
-									"value": "1996",
+									"value": "2000",
 									"type": "text"
 								},
 								{
-									"key": "name",
-									"value": "Test Album",
+									"key": "title",
+									"value": "Test Album 1",
 									"type": "text"
 								},
 								{
 									"key": "id",
-									"value": "12",
+									"value": "1",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://hello-docker.loc/api/albums",
-							"protocol": "http",
+							"raw": "{{url}}/albums",
 							"host": [
-								"hello-docker",
-								"loc"
+								"{{url}}"
 							],
 							"path": [
-								"api",
 								"albums"
 							]
 						}
@@ -179,6 +336,392 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Singer",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/singers/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"singers",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/singers?id=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"singers"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/singers?id=5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"singers"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Singer Name",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/singers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"singers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Test Name update",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/singers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"singers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/files?id=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rename",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Test Name update",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "ttt.jpg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/files/rename",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"rename"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{url}}/files?id=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stream",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/files/stream?id=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"stream"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attachment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/files/attachment?id=3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"attachment"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
