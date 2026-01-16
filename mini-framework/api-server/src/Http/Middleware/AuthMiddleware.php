@@ -10,9 +10,9 @@ use App\Http\ResponseCode;
 use App\Services\AuthService;
 use Exception;
 
-class AuthMiddleware implements IMiddleware
+readonly class AuthMiddleware implements IMiddleware
 {
-    public function __construct(private readonly AuthService $authService)
+    public function __construct(private AuthService $authService)
     {
     }
 
@@ -24,7 +24,6 @@ class AuthMiddleware implements IMiddleware
         if (in_array($request->path, ['/api/login', '/api/get-token'])) {
             return $next($request);
         }
-
 
         $token = isset($request->data?->auth_token) ? $request->data->auth_token : null;
         if ($token === null) {

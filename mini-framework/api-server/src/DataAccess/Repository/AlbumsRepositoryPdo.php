@@ -7,14 +7,29 @@ namespace App\DataAccess\Repository;
 use App\Api\Models\AlbumCreateUpdateModel;
 use App\Api\Models\AlbumModel;
 use App\DataAccess\Interfaces\AlbumsRepositoryInterface;
+use Exception;
 use JsonMapper;
 use JsonMapper_Exception;
 use PDO;
+use stdClass;
 
-class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
+readonly class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
 {
-    public function __construct(private readonly PDO $pdo)
+    public function __construct(private PDO $pdo)
     {
+    }
+
+    public function create(AlbumCreateUpdateModel $model): void
+    {
+        $data = [
+            'title' => $model->title,
+            'year' => $model->year,
+            'singer_id' => $model->singerId,
+
+        ];
+        $sql = "insert into albums (`title`, `year`, `singer_id`) values (:title, :year, :singer_id);";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
     }
 
     /**
@@ -33,14 +48,13 @@ class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
                         from albums left join singers on singers.id = albums.singer_id;"
         );
 
-        $mapper = new JsonMapper();
 
         return array_map(
-            static function (object $row) use ($mapper): AlbumModel {
-                $row->singer = new \stdClass();
+            static function (object $row): AlbumModel {
+                $mapper = new JsonMapper();
+                $row->singer = new stdClass();
                 $row->singer->id = $row->singer_id;
                 $row->singer->name = $row->singer_name ?? 'No name';
-
 
                 return $mapper->map($row, new AlbumModel());
             },
@@ -48,8 +62,14 @@ class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
         );
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     * @throws Exception
+     */
     public function getById(int $id): AlbumModel
     {
+        sleep(5);
+
         $statement = $this->pdo->prepare(
             "select
                         albums.id,
@@ -62,18 +82,16 @@ class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
         );
         $statement->execute(['id' => $id]);
 
-        $mapper = new JsonMapper();
-
         if ($statement->rowCount() > 0) {
             $row = $statement->fetch();
-            $row->singer = new \stdClass();
+            $row->singer = new stdClass();
             $row->singer->id = $row->singer_id;
             $row->singer->name = $row->singer_name ?? 'No name';
+            $mapper = new JsonMapper();
             return $mapper->map($row, new AlbumModel());
         }
 
-        throw new \Error("Album not found");
-        // throw new Exception("Album not found");
+        throw new Exception("Album not found");
     }
 
     public function removeById(int $id): void
@@ -101,18 +119,5 @@ class AlbumsRepositoryPdo implements AlbumsRepositoryInterface
         $sql = "UPDATE albums SET " . $fields . " WHERE id=:id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($updates);
-    }
-
-    public function create(AlbumCreateUpdateModel $model): void
-    {
-        $data = [
-            'title' => $model->title,
-            'year' => $model->year,
-            'singer_id' => $model->singerId,
-
-        ];
-        $sql = "insert into albums (`title`, `year`, `singer_id`) values (:title, :year, :singer_id);";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
     }
 }

@@ -9,8 +9,8 @@ use App\Http\Response;
 
 interface IMiddleware
 {
-    /**
-     * @param callable(Request): Response $next
-     */
+        /**
+         * @param  callable(Request): Response  $next
+         */
     public function handle(Request $request, callable $next): Response;
 }

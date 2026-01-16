@@ -11,7 +11,9 @@ interface AuthTokenRepositoryInterface
 {
     public function remove(int $userId, string $tokenHash): void;
 
-    public function exists(string $token, string $tokenHash): bool;
+    public function removeAll(int $userId): void;
+
+    public function exists(string $tokenHash): bool;
 
     public function getByHash(string $tokenHash): ?AuthToken;
 

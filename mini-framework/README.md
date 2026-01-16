@@ -18,6 +18,11 @@
   
 # redis-commander
   Redis Commander works on http://hello-docker.loc:8082/  
+  Need add db #2
+  KEYS * - get all exist KEYS
+  GET -key- - get value by key
+  DEL -key- - del value by key  
+  
   
 # mailhog
   MailHog works on http://hello-docker.loc:8025/  

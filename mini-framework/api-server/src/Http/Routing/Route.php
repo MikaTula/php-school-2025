@@ -9,7 +9,7 @@ class Route
     /** @var callable $action */
     private $action;
 
-    public function __construct(private string $method, private string $path, callable $action)
+    public function __construct(private readonly string $method, private readonly string $path, callable $action)
     {
         $this->action = $action;
     }

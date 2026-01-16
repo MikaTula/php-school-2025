@@ -15,6 +15,6 @@ class EmptyRequest extends Request
 
     public function getModel(): object
     {
-        return (object)$this->data->params;
+        return (object) $this->data->params;
     }
 }

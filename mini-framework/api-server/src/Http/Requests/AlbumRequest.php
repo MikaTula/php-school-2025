@@ -7,32 +7,30 @@ namespace App\Http\Requests;
 use App\Api\Models\AlbumModel;
 use App\Http\Request;
 use JsonMapper;
+use JsonMapper_Exception;
 
 class AlbumRequest extends Request
 {
     public function rules(): array
     {
-        switch ($this->method) {
-            case 'GET':
-            case 'DELETE':
-            case 'PUT':
-                return [
-                    'id' => ['required', 'int']
-                ];
-
-            case 'POST':
-                return [
-                    'singerId' => ['required', 'int'],
-                    'year' => ['required', 'int'],
-                    'title' => ['required', 'max:20']
-                ];
-        }
-
-        return [];
+        return match ($this->method) {
+            'GET', 'DELETE', 'PUT' => [
+                'id' => ['required', 'int']
+            ],
+            'POST' => [
+                'singerId' => ['required', 'int'],
+                'year' => ['required', 'int'],
+                'title' => ['required', 'max:20']
+            ],
+            default => [],
+        };
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function getModel(): AlbumModel
     {
-        return (new JsonMapper())->map((object)$this->data->params, new AlbumModel());
+        return new JsonMapper()->map((object)$this->data->params, new AlbumModel());
     }
 }

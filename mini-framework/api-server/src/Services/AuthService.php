@@ -10,12 +10,13 @@ use App\DataAccess\Interfaces\UserRepositoryInterface;
 use Carbon\Carbon;
 use RuntimeException;
 
-class AuthService
+readonly class AuthService
 {
     public function __construct(
-        private readonly AuthTokenRepositoryInterface $authTokenRepository,
-        private readonly UserRepositoryInterface $userRepository,
-        private readonly TokenServiceInterface $tokenService,
+        private AuthTokenRepositoryInterface $authTokenRepository,
+        private UserRepositoryInterface $userRepository,
+        private TokenServiceInterface $tokenService,
+        private CacheService $cacheService
     ) {
     }
 
@@ -41,25 +42,22 @@ class AuthService
 
         $this->authTokenRepository->create($user->id, $token, $tokenHash, $expireAt);
 
-        return $token;
-    }
+        $this->cacheService->getOrSave($this->cacheService->makeAuthKey($user->id, $tokenHash), fn() => $token);
 
-    private function encodeToken(int $userId, string $login, Carbon $expireAt): string
-    {
-        $authInfo = AuthInfoModel::create(userId: $userId, login: $login, expireAt: $expireAt);
-        return $this->tokenService->makeToken($authInfo);
+        return $token;
     }
 
     public function logout(int $userId, string $token): void
     {
-        $tokenHash = hash('sha256', $token);
-
+        $tokenHash = $this->tokenService->makeHash($token);
+        $this->cacheService->delUserAuth($userId, $tokenHash);
         $this->authTokenRepository->remove($userId, $tokenHash);
     }
 
-    private function decodeToken(string $token): AuthInfoModel
+    public function logoutAllDevices(int $userId): void
     {
-        return $this->tokenService->validateToken($token);
+        $this->cacheService->delAllUserAuth($userId);
+        $this->authTokenRepository->removeAll($userId);
     }
 
     public function validateToken(string|null $token): AuthInfoModel|null
@@ -69,13 +67,25 @@ class AuthService
         }
 
         $authInfo = $this->tokenService->validateToken($token);
+        $tokenHash = $this->tokenService->makeHash($token);
 
-        $tokenHash = hash('sha256', $token);
-
-        if (!$this->authTokenRepository->exists($token, $tokenHash)) {
-            return null;
+        if (!$this->cacheService->get($this->cacheService->makeAuthKey($authInfo->userId, $tokenHash))) {
+            if (!$this->authTokenRepository->exists($tokenHash)) {
+                return null;
+            }
         }
 
         return $authInfo;
+    }
+
+    private function decodeToken(string $token): AuthInfoModel
+    {
+        return $this->tokenService->validateToken($token);
+    }
+
+    private function encodeToken(int $userId, string $login, Carbon $expireAt): string
+    {
+        $authInfo = AuthInfoModel::create(userId: $userId, login: $login, expireAt: $expireAt);
+        return $this->tokenService->makeToken($authInfo);
     }
 }

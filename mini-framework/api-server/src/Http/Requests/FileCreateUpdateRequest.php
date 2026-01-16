@@ -4,25 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Api\Models\SingerModel;
+use App\Api\Models\FileCreateUpdateModel;
 use App\Http\Request;
 use JsonMapper;
 use JsonMapper_Exception;
 
-class SingerRequest extends Request
+class FileCreateUpdateRequest extends Request
 {
     public function rules(): array
     {
         return match ($this->method) {
-            'GET', 'DELETE' => [
+            'GET', 'DELETE', 'PUT' => [
                 'id' => ['required', 'int'],
-            ],
-            'PUT' => [
-                'id' => ['required', 'int'],
-                'name' => ['required', 'max:20']
+                'name' => ['required', 'max:255']
             ],
             'POST' => [
-                'name' => ['required', 'max:20']
+                'file' => ['required']
             ],
             default => [],
         };
@@ -31,8 +28,8 @@ class SingerRequest extends Request
     /**
      * @throws JsonMapper_Exception
      */
-    public function getModel(): SingerModel
+    public function getModel(): FileCreateUpdateModel
     {
-        return new JsonMapper()->map((object)$this->data->params, new SingerModel());
+        return new JsonMapper()->map((object)$this->data->params, new FileCreateUpdateModel());
     }
 }

@@ -7,6 +7,7 @@ namespace App\Http\Requests;
 use App\Api\Models\LoginModel;
 use App\Http\Request;
 use JsonMapper;
+use JsonMapper_Exception;
 
 class LoginRequest extends Request
 {
@@ -18,8 +19,11 @@ class LoginRequest extends Request
         ];
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function getModel(): LoginModel
     {
-        return (new JsonMapper())->map((object)$this->data->params, new LoginModel());
+        return new JsonMapper()->map((object)$this->data->params, new LoginModel());
     }
 }

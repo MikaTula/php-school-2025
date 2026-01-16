@@ -10,5 +10,7 @@ interface TokenServiceInterface
 {
     public function makeToken(AuthInfoModel $authInfo): string;
 
+    public function makeHash(string $token): string;
+
     public function validateToken($token): AuthInfoModel;
 }

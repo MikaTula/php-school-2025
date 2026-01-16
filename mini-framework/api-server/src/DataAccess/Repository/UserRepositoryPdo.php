@@ -9,9 +9,9 @@ use App\Domain\User\User;
 use Carbon\Carbon;
 use PDO;
 
-class UserRepositoryPdo implements UserRepositoryInterface
+readonly class UserRepositoryPdo implements UserRepositoryInterface
 {
-    public function __construct(private readonly PDO $pdo)
+    public function __construct(private PDO $pdo)
     {
     }
 

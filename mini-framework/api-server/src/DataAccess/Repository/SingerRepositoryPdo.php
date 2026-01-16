@@ -7,19 +7,21 @@ namespace App\DataAccess\Repository;
 use App\Api\Models\SingerCreateUpdateModel;
 use App\Api\Models\SingerModel;
 use App\DataAccess\Interfaces\SingerRepositoryInterface;
+use Exception;
 use JsonMapper;
+use JsonMapper_Exception;
 use PDO;
 
-class SingerRepositoryPdo implements SingerRepositoryInterface
+readonly class SingerRepositoryPdo implements SingerRepositoryInterface
 {
-    public function __construct(private readonly PDO $pdo)
+    public function __construct(private PDO $pdo)
     {
     }
 
 
     /**
      * @return SingerModel[]
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function getAll(): array
     {
@@ -46,7 +48,7 @@ class SingerRepositoryPdo implements SingerRepositoryInterface
         if ($res !== null) {
             return $res;
         }
-        throw new \Exception("Singer not found");
+        throw new Exception("Singer not found");
     }
 
     public function removeById(int $id): void

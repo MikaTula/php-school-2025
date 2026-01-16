@@ -9,12 +9,12 @@ use App\Http\Response;
 
 class MiddlewarePipeline
 {
-    /** @var callable */
+        /** @var callable */
     private $action;
 
-    /**
-     * @param list<IMiddleware> $middlewares
-     */
+        /**
+         * @param  list<IMiddleware>  $middlewares
+         */
     public function __construct(
         private array $middlewares
     ) {

@@ -12,25 +12,29 @@ $dotenv->load();
 
 $pdo = PdoFactory::instance();
 
-//    $pdo->exec('DROP TABLE IF EXISTS `albums`');
-//    $pdo->exec('CREATE TABLE `albums`
-//            (
-//                id INT(11) NOT NULL AUTO_INCREMENT,
-//                title VARCHAR(255) NOT NULL,
-//                year INT,
-//                singer_id INT(11),
-//                PRIMARY KEY (`id`)
-//            )
-//    ');
-//
-//    $pdo->exec('DROP TABLE IF EXISTS `singers`');
-//    $pdo->exec('CREATE TABLE `singers`
-//            (
-//                `id` INT(11) NOT NULL AUTO_INCREMENT,
-//                `name` VARCHAR(255) NOT NULL,
-//                PRIMARY KEY (`id`)
-//            )
-//    ');
+$pdo->exec('DROP TABLE IF EXISTS `albums`');
+$pdo->exec(
+    'CREATE TABLE `albums`
+            (
+                id INT(11) NOT NULL AUTO_INCREMENT,
+                title VARCHAR(255) NOT NULL,
+                year INT,
+                singer_id INT(11),
+                PRIMARY KEY (`id`)
+            )
+    '
+);
+
+$pdo->exec('DROP TABLE IF EXISTS `singers`');
+$pdo->exec(
+    'CREATE TABLE `singers`
+            (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `name` VARCHAR(255) NOT NULL,
+                PRIMARY KEY (`id`)
+            )
+    '
+);
 
 $pdo->exec('DROP TABLE IF EXISTS `auth_tokens`');
 $pdo->exec(
@@ -81,4 +85,27 @@ $pdo->exec(
             )
     '
 );
+
+$pdo->exec('DROP TABLE IF EXISTS `files`');
+$pdo->exec(
+    'CREATE TABLE `files` (
+                  `id` int NOT NULL,
+                  `name` varchar(255) NOT NULL,
+                  `path` varchar(255) NOT NULL,
+                  `type` varchar(255) NOT NULL,
+                  `size` int NOT NULL,
+                  `created_by` int DEFAULT NULL,
+                  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
+);
+$pdo->exec(
+    'ALTER TABLE `files`
+                  ADD PRIMARY KEY (`id`),
+                  ADD UNIQUE KEY `path` (`path`);'
+);
+$pdo->exec(
+    'ALTER TABLE `files`
+                  MODIFY `id` int NOT NULL AUTO_INCREMENT;'
+);
+
 echo 'data base recreated';

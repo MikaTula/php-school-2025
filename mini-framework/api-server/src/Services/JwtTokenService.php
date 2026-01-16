@@ -31,6 +31,11 @@ class JwtTokenService implements TokenServiceInterface
         return JWT::encode($payload, $this->secretKey, $this->algorithm);
     }
 
+    public function makeHash(string $token): string
+    {
+        return hash('sha256', $token);
+    }
+
     /**
      * @throws JsonMapper_Exception
      * @throws Exception
@@ -41,6 +46,6 @@ class JwtTokenService implements TokenServiceInterface
         if (isset($decoded->exp) && $decoded->exp < time()) {
             throw new Exception("Token expired");
         }
-        return (new JsonMapper())->map(json_decode($decoded->data), new AuthInfoModel());
+        return new JsonMapper()->map(json_decode($decoded->data), new AuthInfoModel());
     }
 }

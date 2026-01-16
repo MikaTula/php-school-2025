@@ -36,6 +36,10 @@ class RequestUtils
             $request->auth_token = str_replace('Bearer ', '', $headers['Authorization']);
         }
 
+        if (isset($_FILES) && count($_FILES) > 0) {
+            $request->params = [...$request->params, ...$_FILES];
+        }
+
         return $request;
     }
 

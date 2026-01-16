@@ -3,11 +3,14 @@
 declare(strict_types=1);
 
 use App\Api\Controllers\AlbumController;
+use App\Api\Controllers\FileController;
 use App\Api\Controllers\LoginController;
 use App\Api\Controllers\SingerController;
 use App\DataAccess\PdoFactory;
+use App\DataAccess\RedisFactory;
 use App\DataAccess\Repository\AlbumsRepositoryPdo;
 use App\DataAccess\Repository\AuthTokenRepositoryPdo;
+use App\DataAccess\Repository\FilesRepositoryPdo;
 use App\DataAccess\Repository\SingerRepositoryPdo;
 use App\DataAccess\Repository\UserRepositoryPdo;
 use App\Http\Middleware\AuthMiddleware;
@@ -18,7 +21,9 @@ use App\Http\ResponseCode;
 use App\Http\Routing\Route;
 use App\Http\Routing\Router;
 use App\Services\AuthService;
+use App\Services\CacheService;
 use App\Services\CustomTokenService;
+use App\Services\FileService;
 use App\Services\JwtTokenService;
 use App\Utils\RequestUtils;
 
@@ -33,9 +38,11 @@ $dotenv->load();
 
 $pdo = PdoFactory::instance();
 
+$cacheService = new CacheService(RedisFactory::instance());
+
 // $albumsRepository = new AlbumsRepository(dirname(__DIR__).'/resources/input/albums.txt');
 $albumsRepository = new AlbumsRepositoryPdo($pdo);
-$albumController = new AlbumController($albumsRepository);
+$albumController = new AlbumController($albumsRepository, $cacheService);
 
 $singerRepository = new SingerRepositoryPdo($pdo);
 $singerController = new SingerController($singerRepository);
@@ -47,13 +54,19 @@ $usersRepository = new UserRepositoryPdo($pdo);
 $tokenService = new JwtTokenService();
 $tokenService = new CustomTokenService();
 
-$authService = new AuthService($authTokenRepository, $usersRepository, $tokenService);
+$authService = new AuthService($authTokenRepository, $usersRepository, $tokenService, $cacheService);
 $loginController = new LoginController($authService);
+
+$fileRepository = new FilesRepositoryPdo($pdo);
+$fileService = new FileService(dirname(__DIR__) . '/resources/upload/', $fileRepository);
+$fileController = new FileController($fileRepository, $fileService);
 
 $routes = [
     // Login
     Route::createPost('/api/login', [$loginController, 'login']),
     Route::createPost('/api/logout', [$loginController, 'logout']),
+    Route::createPost('/api/logout-all-devices', [$loginController, 'logoutAllDevices']),
+
     // For Api
     Route::createPost('/api/get-token', [$loginController, 'getToken']),
 
@@ -70,6 +83,15 @@ $routes = [
     Route::createDelete('/api/singers', [$singerController, 'delete']),
     Route::createPut('/api/singers', [$singerController, 'update']),
     Route::createPost('/api/singers', [$singerController, 'create']),
+
+    // Files
+    Route::createPost('/api/files', [$fileController, 'create']),
+    Route::createGet('/api/files', [$fileController, 'getById']),
+    Route::createGet('/api/files/all', [$fileController, 'getAll']),
+    Route::createPut('/api/files/rename', [$fileController, 'rename']),
+    Route::createDelete('/api/files', [$fileController, 'delete']),
+    Route::createGet('/api/files/stream', [$fileController, 'getStream']),
+    Route::createGet('/api/files/attachment', [$fileController, 'getDownload']),
 ];
 
 $router = new Router($routes);

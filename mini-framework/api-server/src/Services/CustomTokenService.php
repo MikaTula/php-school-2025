@@ -28,6 +28,11 @@ class CustomTokenService implements TokenServiceInterface
         return base64_encode(openssl_encrypt($authInfoData, 'aes-256-cbc', $this->key, OPENSSL_RAW_DATA, $this->iv));
     }
 
+    public function makeHash(string $token): string
+    {
+        return hash('sha256', $token);
+    }
+
     /**
      * @throws JsonMapper_Exception
      * @throws Exception
@@ -39,6 +44,6 @@ class CustomTokenService implements TokenServiceInterface
         }
 
         $authInfoData = openssl_decrypt(base64_decode($token), 'aes-256-cbc', $this->key, OPENSSL_RAW_DATA, $this->iv);
-        return (new JsonMapper())->map(json_decode($authInfoData), new AuthInfoModel());
+        return new JsonMapper()->map(json_decode($authInfoData), new AuthInfoModel());
     }
 }

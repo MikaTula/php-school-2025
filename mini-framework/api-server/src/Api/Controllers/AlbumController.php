@@ -9,11 +9,19 @@ use App\Http\Requests\AlbumCreateUpdateRequest;
 use App\Http\Requests\AlbumRequest;
 use App\Http\Response;
 use App\Http\ResponseCode;
+use App\Services\CacheService;
+use JsonMapper_Exception;
 
 class AlbumController extends BaseController
 {
-    public function __construct(private readonly AlbumsRepositoryInterface $albumsRepository)
-    {
+    /**
+     * @param AlbumsRepositoryInterface $albumsRepository
+     * @param CacheService $cacheService
+     */
+    public function __construct(
+        private readonly AlbumsRepositoryInterface $albumsRepository,
+        private readonly CacheService $cacheService
+    ) {
     }
 
     public function getAll(): Response
@@ -22,10 +30,18 @@ class AlbumController extends BaseController
         return $this->successResponse($albums);
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function getById(AlbumRequest $request): Response
     {
         $body = $request->getModel();
-        $album = $this->albumsRepository->getById($body->id);
+        // $album = $this->albumsRepository->getById($body->id);
+
+        $album = $this->cacheService->getOrSave(
+            $this->cacheService->makeAlbumKey($body->id),
+            fn() => $this->albumsRepository->getById($body->id)
+        );
 
         return ($album !== null) ? $this->successResponse($album) : $this->failResponse(
             ResponseCode::NotFound,
@@ -34,6 +50,9 @@ class AlbumController extends BaseController
         );
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function delete(AlbumRequest $request): Response
     {
         $body = $request->getModel();
@@ -42,6 +61,9 @@ class AlbumController extends BaseController
         return $this->successResponse();
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function update(AlbumCreateUpdateRequest $request): Response
     {
         $body = $request->getModel();
@@ -50,6 +72,9 @@ class AlbumController extends BaseController
         return $this->successResponse();
     }
 
+    /**
+     * @throws JsonMapper_Exception
+     */
     public function create(AlbumCreateUpdateRequest $request): Response
     {
         $body = $request->getModel();

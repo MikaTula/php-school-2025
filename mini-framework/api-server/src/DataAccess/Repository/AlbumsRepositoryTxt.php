@@ -85,7 +85,7 @@ class AlbumsRepositoryTxt implements AlbumsRepositoryInterface
 
         $this->albums[] = [
             'id' => $id,
-            'name' => $model->name,
+            'name' => $model->title,
             'singerId' => $model->singerId,
             'year' => $model->year
         ];
